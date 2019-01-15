@@ -1,0 +1,31 @@
+server:
+  port: 8800
+
+spring:
+  main:
+    banner-mode: "OFF"
+  profiles:
+    active: dev
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: "jdbc:postgresql://127.0.0.1:15432/postgres?currentSchema=polldemo"
+    username: user
+    password: user
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximumPoolSize: 10
+      poolName: poll-db
+      minimumIdle: 2
+  flyway:
+    locations: classpath:db/migration
+    schemas: polldemo
+
+logging:
+  level:
+    ROOT: INFO
+    com.zaxxer: DEBUG
+    org.flyway: DEBUG
+    com.schibsted.onepunch.polldemo: DEBUG
+
+
+springfox.documentation.swagger.v2.path: /schema
