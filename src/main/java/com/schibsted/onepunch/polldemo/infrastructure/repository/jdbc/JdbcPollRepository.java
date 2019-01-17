@@ -7,6 +7,7 @@ import com.schibsted.onepunch.polldemo.domain.poll.PollFactory;
 import com.schibsted.onepunch.polldemo.domain.poll.PollRepository;
 import com.schibsted.onepunch.polldemo.infrastructure.repository.jdbc.dto.PollDto;
 import com.schibsted.onepunch.polldemo.infrastructure.repository.jdbc.dto.ProposalDto;
+import com.schibsted.onepunch.polldemo.infrastructure.repository.jdbc.dto.ProposalInsertRow;
 import com.schibsted.onepunch.polldemo.infrastructure.repository.jdbc.dto.VoteDto;
 import com.schibsted.onepunch.polldemo.infrastructure.repository.jdbc.mapper.PollMapper;
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -35,9 +37,16 @@ public class JdbcPollRepository extends AbstractTransactionalJdbcRepository impl
     public Mono<Poll> save(Poll poll) {
         return runnableTx(() -> {
             pollMapper.insert(poll);
-            IntStream.range(0, poll.getProposalList().size())
-                    .forEach(index ->
-                            pollMapper.insertProposal(poll.getId(), index, poll.getProposalList().get(index))); })
+            List<ProposalInsertRow> proposalRows = IntStream.range(0, poll.getProposalList().size())
+                    .mapToObj(index -> new ProposalInsertRow(
+                            poll.getProposalList().get(index).getId(),
+                            poll.getId(),
+                            index,
+                            poll.getProposalList().get(index).getSubject()
+                    ))
+                    .collect(Collectors.toList());
+            pollMapper.insertProposals(proposalRows);
+        })
                 .subscribeOn(Schedulers.elastic())
                 .publishOn(Schedulers.parallel())
                 .then(Mono.just(poll));

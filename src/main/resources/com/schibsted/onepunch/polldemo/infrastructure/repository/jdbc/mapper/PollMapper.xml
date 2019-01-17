@@ -19,9 +19,16 @@
 
     <insert id="insertProposal">
         INSERT INTO proposal (id, poll_id, index, subject)
-        VALUES (#{proposal.id}, #{pollId}, #{index}, #{proposal.subject});
+        VALUES (#{proposal.id}, #{pollId}, #{index}, #{proposal.subject})
     </insert>
 
+    <insert id="insertProposals">
+        INSERT INTO proposal (id, poll_id, index, subject)
+        VALUES <foreach collection="proposalRows" separator="," item="row">
+            (#{row.id}, #{row.pollId}, #{row.index}, #{row.subject})
+        </foreach>
+
+    </insert>
     <!--********************************************************-->
     <!-- UP: mapping a domain object directly... :(             -->
     <!--********************************************************-->
