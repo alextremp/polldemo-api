@@ -5,12 +5,19 @@ import com.schibsted.onepunch.polldemo.infrastructure.repository.jdbc.JdbcPollRe
 import com.schibsted.onepunch.polldemo.infrastructure.repository.jdbc.mapper.PollMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
 @Configuration
 public class RepositoryConfiguration {
 
     @Bean
-    public JdbcPollRepository jdbcPollRepository(PollMapper pollMapper, PollFactory pollFactory) {
-        return new JdbcPollRepository(pollMapper, pollFactory);
+    public TransactionTemplate transactionTemplate(PlatformTransactionManager platformTransactionManager) {
+        return new TransactionTemplate(platformTransactionManager);
+    }
+
+    @Bean
+    public JdbcPollRepository jdbcPollRepository(TransactionTemplate transactionTemplate, PollMapper pollMapper, PollFactory pollFactory) {
+        return new JdbcPollRepository(transactionTemplate, pollMapper, pollFactory);
     }
 }

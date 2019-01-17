@@ -27,7 +27,7 @@ public class RestPollController {
     @PostMapping("/poll")
     @ResponseStatus(CREATED)
     public Mono<Poll> createPoll(@Valid @RequestBody CreatePollRequest request) {
-        return createPollUseCase.createPoll(request.getSubject());
+        return createPollUseCase.createPoll(request.getSubject(), request.getProposals());
     }
 
     @GetMapping("/poll/{pollId}")
