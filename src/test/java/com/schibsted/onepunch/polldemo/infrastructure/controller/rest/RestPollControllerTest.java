@@ -1,7 +1,6 @@
 package com.schibsted.onepunch.polldemo.infrastructure.controller.rest;
 
 import com.schibsted.onepunch.polldemo.infrastructure.controller.rest.dto.CreatePollRequest;
-import com.schibsted.onepunch.polldemo.integration.AbstractRestControllerTestCase;
 import io.restassured.response.ValidatableResponse;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
