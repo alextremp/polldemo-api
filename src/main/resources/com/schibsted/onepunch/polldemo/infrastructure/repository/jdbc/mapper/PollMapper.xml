@@ -24,9 +24,9 @@
 
     <insert id="insertProposals">
         INSERT INTO proposal (id, poll_id, index, subject)
-        VALUES <foreach collection="proposalRows" separator="," item="row">
-            (#{row.id}, #{row.pollId}, #{row.index}, #{row.subject})
-        </foreach>
+        VALUES <foreach collection="proposalList" separator="," item="row" index="index">
+            (#{row.id}, #{pollId}, #{index}, #{row.subject})
+               </foreach>
 
     </insert>
     <!--********************************************************-->
