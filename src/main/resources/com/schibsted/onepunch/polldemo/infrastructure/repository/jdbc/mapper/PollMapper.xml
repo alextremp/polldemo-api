@@ -17,6 +17,11 @@
         VALUES (#{poll.id}, #{poll.subject}, #{poll.creationTime}, #{poll.active});
     </insert>
 
+    <insert id="insertProposal">
+        INSERT INTO proposal (id, poll_id, index, subject)
+        VALUES (#{proposal.id}, #{pollId}, #{index}, #{proposal.subject});
+    </insert>
+
     <!--********************************************************-->
     <!-- UP: mapping a domain object directly... :(             -->
     <!--********************************************************-->

@@ -26,6 +26,8 @@ logging:
     ROOT: INFO
     com.zaxxer: DEBUG
     org.flyway: DEBUG
+    org.springframework.jdbc: DEBUG
+    org.springframework.http.codec.json: DEBUG
     com.schibsted.onepunch.polldemo: DEBUG
 
 

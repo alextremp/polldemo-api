@@ -1,13 +1,14 @@
 package com.schibsted.onepunch.polldemo.infrastructure.controller.rest;
 
 import com.schibsted.onepunch.polldemo.infrastructure.controller.rest.dto.CreatePollRequest;
-import com.schibsted.onepunch.polldemo.integration.AbstractRestControllerTestCase;
 import io.restassured.response.ValidatableResponse;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.jdbc.Sql;
 
-import static org.hamcrest.Matchers.is;
+import java.util.Arrays;
+
+import static org.hamcrest.Matchers.*;
 
 public class RestPollControllerTest extends AbstractRestControllerTestCase {
 
@@ -31,10 +32,22 @@ public class RestPollControllerTest extends AbstractRestControllerTestCase {
         String givenSubject = "This is a new poll";
         CreatePollRequest createPollRequest = new CreatePollRequest();
         createPollRequest.setSubject(givenSubject);
-        ValidatableResponse result = POST("/poll", createPollRequest);
+        createPollRequest.setProposals(Arrays.asList(
+                "This is the proposal #1",
+                "This is the proposal #2",
+                "This is the proposal #3"
+        ));
+        ValidatableResponse createResult = POST("/poll", createPollRequest);
 
-        result.statusCode(HttpStatus.CREATED.value());
-        result.body("subject", is(givenSubject));
+        createResult.statusCode(HttpStatus.CREATED.value());
+        createResult.body("subject", is(givenSubject));
+
+        String createdId = createResult.extract().body().jsonPath().get("id");
+        ValidatableResponse getResult = GET("/poll/" + createdId);
+
+        getResult.statusCode(HttpStatus.OK.value());
+        getResult.body("subject", is(givenSubject));
+        getResult.body("proposalList.size()", is(3));
     }
 
     @Test

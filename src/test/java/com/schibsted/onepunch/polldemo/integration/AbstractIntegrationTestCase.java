@@ -21,5 +21,4 @@ public abstract class AbstractIntegrationTestCase {
             .waitingForService("db", HealthChecks.toHaveAllPortsOpen())
             .saveLogsTo("target/docker-logs")
             .build();
-
 }

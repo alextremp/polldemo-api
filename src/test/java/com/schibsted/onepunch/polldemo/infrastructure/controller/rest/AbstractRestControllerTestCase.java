@@ -1,7 +1,7 @@
-package com.schibsted.onepunch.polldemo.integration;
+package com.schibsted.onepunch.polldemo.infrastructure.controller.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.schibsted.onepunch.polldemo.PollDemoApplication;
+import com.schibsted.onepunch.polldemo.integration.AbstractIntegrationTestCase;
 import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
 import org.slf4j.Logger;
@@ -25,6 +25,7 @@ public abstract class AbstractRestControllerTestCase extends AbstractIntegration
     protected ValidatableResponse GET(String relativePath) {
         ValidatableResponse validatableResponse = RestAssured.get(address.apply(relativePath)).then();
         if (LOG.isDebugEnabled()) {
+            LOG.debug(">>> result from [GET]: " + relativePath);
             validatableResponse.extract().response().prettyPrint();
         }
         return validatableResponse;
@@ -36,6 +37,7 @@ public abstract class AbstractRestControllerTestCase extends AbstractIntegration
                 .body(data)
                 .when().post(address.apply(relativePath)).then();
         if (LOG.isDebugEnabled()) {
+            LOG.debug(">>> result from [POST]: " + relativePath);
             validatableResponse.extract().response().prettyPrint();
         }
         return validatableResponse;
