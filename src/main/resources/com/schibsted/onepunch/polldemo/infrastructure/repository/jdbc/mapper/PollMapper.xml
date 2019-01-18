@@ -42,21 +42,33 @@
         <result column="vo_voter_id" property="voterId" />
     </resultMap>
 
-    <select id="selectPollDtoList" resultMap="PollDtoResultMap">
+    <sql id="pollDtoSelect">
         SELECT
-          po.id            AS po_id,
-          po.subject       AS po_subject,
-          po.creation_time AS po_creation_time,
-          po.active        AS po_active,
-          pr.id            AS pr_id,
-          pr.subject       AS pr_subject,
-          vo.id            AS vo_id,
-          vo.voter_id      AS vo_voter_id
+            po.id            AS po_id,
+            po.subject       AS po_subject,
+            po.creation_time AS po_creation_time,
+            po.active        AS po_active,
+            pr.id            AS pr_id,
+            pr.subject       AS pr_subject,
+            vo.id            AS vo_id,
+            vo.voter_id      AS vo_voter_id
         FROM poll po
-          LEFT OUTER JOIN proposal pr ON po.id = pr.poll_id
-          LEFT OUTER JOIN vote vo ON pr.id = vo.proposal_id
+            LEFT OUTER JOIN proposal pr ON po.id = pr.poll_id
+            LEFT OUTER JOIN vote vo ON pr.id = vo.proposal_id
+    </sql>
+    <sql id="pollDtoOrder">
         ORDER BY po.creation_time DESC, pr.index ASC
+    </sql>
+
+    <select id="selectPollDtoList" resultMap="PollDtoResultMap">
+        <include refid="pollDtoSelect"/>
+        <include refid="pollDtoOrder"/>
         LIMIT #{limit}
     </select>
 
+    <select id="selectOnePollDtoByPK" resultMap="PollDtoResultMap">
+        <include refid="pollDtoSelect"/>
+        WHERE po.id = #{id}
+        <include refid="pollDtoOrder"/>
+    </select>
 </mapper>
