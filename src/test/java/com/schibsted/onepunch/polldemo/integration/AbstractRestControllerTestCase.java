@@ -13,7 +13,7 @@ import java.util.function.Function;
 
 
 @SpringBootTest(classes = PollDemoApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class AbstractRestControllerTestCase extends AbstractIntegrationTestCase {
+public abstract class AbstractRestControllerTestCase extends AbstractIntegrationTestCase {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractRestControllerTestCase.class);
 
