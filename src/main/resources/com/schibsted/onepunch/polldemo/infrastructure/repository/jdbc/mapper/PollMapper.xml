@@ -17,4 +17,46 @@
         VALUES (#{poll.id}, #{poll.subject}, #{poll.creationTime}, #{poll.active});
     </insert>
 
+    <!--********************************************************-->
+    <!-- UP: mapping a domain object directly... :(             -->
+    <!--********************************************************-->
+    <!-- DOWN: mapping aggregated DTOs in a single query... :)  -->
+    <!--********************************************************-->
+
+    <resultMap id='PollDtoResultMap' type="com.schibsted.onepunch.polldemo.infrastructure.repository.jdbc.dto.PollDto">
+        <id column="po_id" property="id" />
+        <result column="po_subject" property="subject" />
+        <result column="po_creation_time" property="creationTime" />
+        <result column="po_active" property="active" />
+        <collection property="proposalDtoList" resultMap="ProposalDtoResultMap" javaType="ArrayList" column="proposal.id"/>
+    </resultMap>
+
+    <resultMap id="ProposalDtoResultMap" type="com.schibsted.onepunch.polldemo.infrastructure.repository.jdbc.dto.ProposalDto">
+        <id column="pr_id" property="id" />
+        <result column="pr_subject" property="subject" />
+        <collection property="voteDtoList" resultMap="VoteDtoResultMap" javaType="ArrayList" column="vote.id"/>
+    </resultMap>
+
+    <resultMap id="VoteDtoResultMap" type="com.schibsted.onepunch.polldemo.infrastructure.repository.jdbc.dto.VoteDto">
+        <id column="vo_id" property="id" />
+        <result column="vo_voter_id" property="voterId" />
+    </resultMap>
+
+    <select id="selectPollDtoList" resultMap="PollDtoResultMap">
+        SELECT
+          po.id            AS po_id,
+          po.subject       AS po_subject,
+          po.creation_time AS po_creation_time,
+          po.active        AS po_active,
+          pr.id            AS pr_id,
+          pr.subject       AS pr_subject,
+          vo.id            AS vo_id,
+          vo.voter_id      AS vo_voter_id
+        FROM poll po
+          LEFT OUTER JOIN proposal pr ON po.id = pr.poll_id
+          LEFT OUTER JOIN vote vo ON pr.id = vo.proposal_id
+        ORDER BY po.creation_time DESC, pr.index ASC
+        LIMIT #{limit}
+    </select>
+
 </mapper>
