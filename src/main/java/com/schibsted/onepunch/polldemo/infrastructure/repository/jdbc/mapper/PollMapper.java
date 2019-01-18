@@ -19,6 +19,4 @@ public interface PollMapper {
     Poll selectOneByPK(@Param("id") String id);
 
     List<PollDto> selectPollDtoList(@Param("limit") Integer limit);
-
-    PollDto selectOnePollDtoByPK(@Param("id") String id);
 }

@@ -39,13 +39,4 @@ public class PollMapperTest extends AbstractIntegrationTestCase {
         assertThat(pollDtoList.get(2).getId()).isEqualTo("poll-03");
         assertThat(pollDtoList.get(2).getProposalDtoList()).hasSize(1);
     }
-
-    @Test
-    @Sql({"/fixtures/db/truncates.sql", "/fixtures/db/inserts-03-polls.sql"})
-    public void shouldLoadOnePollDto() {
-        PollDto pollDto = pollMapper.selectOnePollDtoByPK("poll-01");
-        assertThat(pollDto.getId()).isEqualTo("poll-01");
-        assertThat(pollDto.getProposalDtoList()).hasSize(2);
-        assertThat(pollDto.getProposalDtoList().get(0).getVoteDtoList()).hasSize(3);
-    }
 }
