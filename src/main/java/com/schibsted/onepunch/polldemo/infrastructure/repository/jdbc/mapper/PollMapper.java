@@ -3,6 +3,7 @@ package com.schibsted.onepunch.polldemo.infrastructure.repository.jdbc.mapper;
 import com.schibsted.onepunch.polldemo.domain.poll.Poll;
 import com.schibsted.onepunch.polldemo.domain.poll.Proposal;
 import com.schibsted.onepunch.polldemo.infrastructure.repository.jdbc.dto.PollDto;
+import com.schibsted.onepunch.polldemo.infrastructure.repository.jdbc.dto.ProposalInsertRow;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,7 +22,6 @@ public interface PollMapper {
 
     // v3 - to insert all rows in a single db instruction that internally assigns the internal index value
     void insertProposals(@Param("pollId") String pollId, @Param("proposalList") List<Proposal> proposalList);
-
 
     List<PollDto> selectPollDtoList(@Param("limit") Integer limit);
 
