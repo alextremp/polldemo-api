@@ -18,7 +18,10 @@ public interface PollMapper {
     void insertProposal(@Param("pollId") String pollId, @Param("index") Integer index, @Param("proposal") Proposal proposal);
 
     // v2 - to insert all rows in a single db instruction
-    void insertProposals(@Param("proposalRows") List<ProposalInsertRow> proposalRows);
+    // void insertProposals(@Param("proposalRows") List<ProposalInsertRow> proposalRows);
+
+    // v3 - to insert all rows in a single db instruction that internally assigns the internal index value
+    void insertProposals(@Param("pollId") String pollId, @Param("proposalList") List<Proposal> proposalList);
 
     List<PollDto> selectPollDtoList(@Param("limit") Integer limit);
 
